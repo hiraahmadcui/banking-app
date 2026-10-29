@@ -32,14 +32,14 @@ pipeline {
             emailext(
                 subject: "Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "The build for ${env.JOB_NAME} (Build #${env.BUILD_NUMBER}) was SUCCESSFUL.\n\nTriggered by: ${env.CAUSE}\n\nCheck console output at: ${env.BUILD_URL}",
-                to: '${CHANGE_AUTHOR_EMAIL}'
+                to: '${CHANGE_AUTHOR_EMAIL}, ${GIT_COMMITTER_EMAIL}'
             )
         }
         failure {
             emailext(
                 subject: "Build FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "The build for ${env.JOB_NAME} (Build #${env.BUILD_NUMBER}) FAILED.\n\nTriggered by: ${env.CAUSE}\n\nCheck console output at: ${env.BUILD_URL}",
-                to: '${CHANGE_AUTHOR_EMAIL}'
+                to: '${CHANGE_AUTHOR_EMAIL}, ${GIT_COMMITTER_EMAIL}'
             )
         }
     }

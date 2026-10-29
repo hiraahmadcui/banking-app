@@ -11,12 +11,12 @@ services:
     working_dir: /app
     command: bash -c "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8000"
     environment:
-      - MONGO_URL=mongodb://jenkins-mongodb:27017
+      - MONGO_URL=mongodb://mongodb:27017
     depends_on:
-      - jenkins-mongodb
+      - mongodb
     restart: unless-stopped
 
-  jenkins-mongodb:
+  mongodb:
     image: mongo:latest
     container_name: jenkins-mongodb
     ports:

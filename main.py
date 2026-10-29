@@ -25,7 +25,7 @@ app.include_router(manager_router.router, prefix="/manager")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-client = MongoClient("mongodb://mongodb:27017")
+client = MongoClient("mongodb://jenkins-mongodb:27017")
 db = client.bank
 
 @app.get("/")

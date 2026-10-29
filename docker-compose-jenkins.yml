@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    image: python:3.9-slim
+    container_name: jenkins-fastapi-web
+    ports:
+      - "9090:8000"  
+    volumes:
+      - ./:/app      
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8000"
+    environment:
+      - MONGO_URL=mongodb://jenkins-mongodb:27017
+    depends_on:
+      - jenkins-mongodb
+    restart: unless-stopped
+
+  jenkins-mongodb:
+    image: mongo:latest
+    container_name: jenkins-mongodb
+    ports:
+      - "27019:27017" 
+    volumes:
+      - mongo_data_jenkins:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data_jenkins:

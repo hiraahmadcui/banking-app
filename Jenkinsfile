@@ -20,7 +20,7 @@ pipeline {
                 // Build the image
                 sh 'docker build -t hiracui/fastapi-app:latest .'
                 
-                // Stop old containers and start new ones using the Jenkins-specific compose file
+                // Stop old containers and start new ones
                 sh 'docker compose -f docker-compose-jenkins.yml down || true'
                 sh 'docker compose -f docker-compose-jenkins.yml up -d'
             }
@@ -32,15 +32,18 @@ pipeline {
             emailext(
                 subject: "Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "The build for ${env.JOB_NAME} (Build #${env.BUILD_NUMBER}) was SUCCESSFUL.\n\nTriggered by: ${env.CAUSE}\n\nCheck console output at: ${env.BUILD_URL}",
-                to: '${CHANGE_AUTHOR_EMAIL}, ${GIT_COMMITTER_EMAIL}'
+                to: emailextrecipients([
+                    [$class: 'CulpritsRecipientProvider']
+                ])
             )
         }
         failure {
             emailext(
                 subject: "Build FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "The build for ${env.JOB_NAME} (Build #${env.BUILD_NUMBER}) FAILED.\n\nTriggered by: ${env.CAUSE}\n\nCheck console output at: ${env.BUILD_URL}",
-                to: '${CHANGE_AUTHOR_EMAIL}, ${GIT_COMMITTER_EMAIL}'
+                to: emailextrecipients([
+                    [$class: 'CulpritsRecipientProvider']
+                ])
             )
         }
     }
-}

@@ -18,7 +18,7 @@ from datetime import datetime
 router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
-client = MongoClient("mongodb://mongodb:27017")
+client = MongoClient("mongodb://jenkins-mongodb:27017")
 db = client.bank
 
 SECRET_KEY = "rubab"
